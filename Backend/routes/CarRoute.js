@@ -5,7 +5,7 @@ import { addCar, fetchAdminCars, fetchAllCars, updateStatus } from '../controlle
 const CarRouter=express.Router();
 
 CarRouter.post("/addcar",upload.single("CarPic"),addCar);
-CarRouter.get("/getadmin",fetchAdminCars);
+CarRouter.post("/getadmin",fetchAdminCars);
 CarRouter.get("/getall",fetchAllCars);
 CarRouter.put("/status",updateStatus);
 

@@ -28,6 +28,33 @@ export const Register = async (req, res) => {
   }
 };
 
+export const Login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const existingUser = await UserModel.findOne({ email });
+    if (!existingUser) {
+      return res.status(400).json({ success: false, message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, existingUser.password);
+    if (!isMatch) {
+      return res.status(400).json({ success: false, message: "Invalid email or password" });
+    }
+
+    // Remove password before sending back
+    const { password: _, ...userWithoutPassword } = existingUser._doc;
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user: userWithoutPassword,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 
 
 export const UpdateProfile = async (req, res) => {
